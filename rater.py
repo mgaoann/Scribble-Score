@@ -3,31 +3,12 @@
 import cv2
 import subprocess
 import numpy as np
+from sobel import sobel, normal, curve
+from bestfit import best_fit
 
-# Load the image
-image_path = input("Enter the image file path: ")
-image = cv2.imread(image_path)
-if image is None:
-    print("Error: The provided file is not a valid image or does not exist.")
-    exit()
-else:
-    print("Image loaded successfully!")
-
-# Convert the image to grayscale
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-# Use tesseract command-line tool to extract text from the image
-result = subprocess.run(['tesseract', image_path, 'stdout'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-text = result.stdout.decode('utf-8')
-if not text:
-    print("No text detected. If there is handwriting in this image, I am unable to read it.")
-    exit()
-
-# Function to compute Mean Squared Error
 def mean_squared_error(image1, image2):
     return np.mean((image1.astype(np.float32) - image2.astype(np.float32)) ** 2)
 
-# Function to compute Structural Similarity Index (SSIM)
 def compute_ssim(image1, image2):
     C1 = 6.5025
     C2 = 58.5225
@@ -45,15 +26,12 @@ def compute_ssim(image1, image2):
     ssim_map = ((2 * mu1 * mu2 + C1) * (2 * sigma12 + C2)) / ((mu1**2 + mu2**2 + C1) * (sigma1_sq + sigma2_sq + C2))
     return np.mean(ssim_map)
 
-# Function to rate handwriting legibility
 def rate_handwriting(image):
-    mse = mean_squared_error(image, image)  # Comparing image with itself as no reference is provided
-    similarity = compute_ssim(image, image)
-    
-    score = (1 - mse / 1000) * similarity * 100
-    return max(0, min(100, score))  # Ensure score is within [0, 100]
+    score = best_fit(image)
+    #print(score)
+    return (1 - score) * 150
 
-# Function to suggest improvements
+# suggest improvements
 def suggest_improvements(score):
     if score > 80:
         return "Your handwriting is very good! Little to no improvement needed"
@@ -62,11 +40,30 @@ def suggest_improvements(score):
     else:
         return "Your handwriting is difficult to read. Try writing larger and more spaced out."
 
+
+
+image_path = input("Enter the image file path: ")
+image = cv2.imread(image_path)
+if image is None:
+    print("Error: The provided file is not a valid image or does not exist.")
+    exit()
+else:
+    print("Image loaded successfully!")
+
+# convert the image to grayscale
+sob = curve(sobel(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)))
+
+#use tesseract to get text from img
+result = subprocess.run(['tesseract', image_path, 'stdout'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+text = result.stdout.decode('utf-8')
+if not text:
+    print("No text detected. If there is handwriting in this image, I am unable to read it.")
+    exit()
+
 # Rate the handwriting
-score = rate_handwriting(gray)
+score = rate_handwriting(sob)
 improvement_suggestion = suggest_improvements(score)
 
 # Output the results
-print(f"Extracted Text: {text}")
-print(f"Handwriting Legibility Score: {score:.2f}")
+print(f"Extracted Text: {text}Handwriting Legibility Score: {score:.2f}")
 print(f"Improvement Suggestion: {improvement_suggestion}")

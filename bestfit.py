@@ -40,7 +40,7 @@ def plot_best_fit(img):
 
     plt.subplot(1, 2, 2)
     plt.title("Sobel Edge Detection")
-    plt.imshow(sobelimg, cmap="gray")
+    plt.imshow(img, cmap="gray")
     plt.axis("off")
 
     plt.show()

@@ -1,12 +1,12 @@
 #! /opt/homebrew/bin/python3 
 
 import cv2
-#from sobel import sobel, normal, curve
+# from sobel import sobel, normal, curve
 import numpy as np
 import matplotlib.pyplot as plt
 
 
-def plot_best_fit(img):
+def best_fit(img):
     h = img.shape[0]
     w = img.shape[1]
     # Generate X and Y coordinates
@@ -19,6 +19,8 @@ def plot_best_fit(img):
     # Generate the best fit line values
     fit = m * X + b
 
+    distances_squared = ((m * X - Y + b) ** 2) / (m**2 + 1)
+    avg_squared_distance = np.mean(distances_squared)
 
 
     plt.figure(figsize=(12, 2))
@@ -44,6 +46,8 @@ def plot_best_fit(img):
     plt.axis("off")
 
     plt.show()
+    print (avg_squared_distance/(np.average(Y, weights=intensities) ** 2))
+    return avg_squared_distance/(np.average(Y, weights=intensities) ** 2)
 
 
 
@@ -57,4 +61,4 @@ def plot_best_fit(img):
 
 # sobelimg = curve(sobel(correct_image))
 
-# plot_best_fit(sobelimg)
+# best_fit(sobelimg)

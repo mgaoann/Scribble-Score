@@ -5,23 +5,27 @@ import matplotlib.pyplot as plt
 def detect_word_spaces(img, threshold=10):
     """
     Detects spaces between words in a handwritten text image and checks for uniformity.
+    Groups letters into words based on the spaces between them, ignoring punctuation and small disconnected components.
     
     img: grayscale image of handwritten text.
-    threshold: Acceptable deviation in space sizes.
+    threshold: acceptable deviation in space sizes.
     return: list of detected space widths, average space, standard deviation.
     """
     # Convert to binary
     _, binary = cv2.threshold(img, 128, 255, cv2.THRESH_BINARY_INV)
     
+    # Morphological closing to connect nearby letters
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (20, 5))
+    binary = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel)
+
     # Find contours (connected components of text)
     contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    bounding_boxes = [cv2.boundingRect(cnt) for cnt in contours if cv2.contourArea(cnt) > 50]
+    bounding_boxes.sort(key=lambda b: b[0]) # Sort bounding boxes by x-coordinate (left to right)
     
-    # Extract bounding boxes of contours
-    bounding_boxes = [cv2.boundingRect(cnt) for cnt in contours]
-    
-    # Sort bounding boxes by x-coordinate (left to right)
-    bounding_boxes.sort(key=lambda b: b[0])
-    
+    # Filters out small boxes (i.e. punctuation, dots on letters)
+    # bounding_boxes = [b for b in bounding_boxes if b[2] > 5 and b[3] > 5]
+
     # Compute spaces between words
     spaces = [bounding_boxes[i+1][0] - (bounding_boxes[i][0] + bounding_boxes[i][2])
               for i in range(len(bounding_boxes)-1)]
@@ -39,8 +43,8 @@ def rate_spacing_uniformity(image):
     """
     Evaluates the uniformity of word spacing in handwriting.
     
-    :param image: Input grayscale image of handwritten text.
-    :return: A score and an improvement suggestion.
+    image: grayscale image of handwritten text.
+    return: a score and an improvement suggestion.
     """
     spaces, avg_space, std_dev, bounding_boxes, contours = detect_word_spaces(image)
     
@@ -58,6 +62,10 @@ def rate_spacing_uniformity(image):
 def show_contours(image, bounding_boxes, contours):
     """
     Displays the image with detected contours and bounding boxes drawn.
+
+    image: original image.
+    bounding_boxes: list of bounding boxes of detected words.
+    contours: list of contours of detected words.
     """
     image_copy = image.copy()
     cv2.drawContours(image_copy, contours, -1, (0, 255, 0), 2)
@@ -91,4 +99,7 @@ print(f"Word Spacing Score: {spacing_score:.2f}")
 print(f"Spacing Improvement Suggestion: {spacing_suggestion}")
 
 # Show image with detected contours and bounding boxes
+#cv2.imshow("Detected Words", image)
+#cv2.waitKey(0)
+#cv2.destroyAllWindows()
 show_contours(image, bounding_boxes, contours)

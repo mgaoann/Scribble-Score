@@ -1,10 +1,7 @@
 #! /opt/homebrew/bin/python3 
 
 import cv2
-import matplotlib.pyplot as plt
-from sobel import sobel, normal, curve
-
-
+#from sobel import sobel, normal, curve
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -50,14 +47,14 @@ def plot_best_fit(img):
 
 
 
-image_path = input("Enter the image file path: ")   #take user input for file
-correct_image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-if correct_image is None:
-    print("Error: The provided file is not a valid image or does not exist.")
-    exit()
-else:
-    print("Image loaded successfully!")
+# image_path = input("Enter the image file path: ")   #take user input for file
+# correct_image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+# if correct_image is None:
+#     print("Error: The provided file is not a valid image or does not exist.")
+#     exit()
+# else:
+#     print("Image loaded successfully!")
 
-sobelimg = curve(sobel(correct_image))
+# sobelimg = curve(sobel(correct_image))
 
-plot_best_fit(sobelimg)
+# plot_best_fit(sobelimg)

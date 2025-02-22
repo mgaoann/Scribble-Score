@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+from sobel import sobel, normal, curve
 
 def detect_word_spaces(img, threshold=10):
     """
@@ -14,13 +15,42 @@ def detect_word_spaces(img, threshold=10):
     # Convert to binary
     _, binary = cv2.threshold(img, 128, 255, cv2.THRESH_BINARY_INV)
     
-    # Morphological closing to connect nearby letters
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (20, 5))
-    binary = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel)
+    # Morphological closing to connect nearby letters horizontally
+    letter_widths = []
+    letter_heights = []
+    contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    for cnt in contours:
+        x, y, w, h = cv2.boundingRect(cnt)
+        letter_widths.append(w)
+        letter_heights.append(h)
+    
+    if letter_widths:
+        avg_letter_width = int(np.median(letter_widths))
+    else:
+        avg_letter_width = 10
+    
+    if letter_heights:
+        avg_letter_height = int(np.median(letter_heights))
+    else:
+        avg_letter_height = 10
+
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (avg_letter_width, 5))
+    closed = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel)
+
+    # Morphological closing vertically to merge dotted letters
+    kernel_vert = cv2.getStructuringElement(cv2.MORPH_RECT, (avg_letter_height, 10))
+    binary = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel_vert)
+
+    #kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (20, 5))
+    #binary = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel)
 
     # Find contours (connected components of text)
-    contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    bounding_boxes = [cv2.boundingRect(cnt) for cnt in contours if cv2.contourArea(cnt) > 50]
+    #contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    # Find contours again after closing
+    contours, _ = cv2.findContours(closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    bounding_boxes = [cv2.boundingRect(cnt) for cnt in contours if cv2.contourArea(cnt) > 15]
     bounding_boxes.sort(key=lambda b: b[0]) # Sort bounding boxes by x-coordinate (left to right)
     
     # Filters out small boxes (i.e. punctuation, dots on letters)
@@ -88,18 +118,10 @@ if image is None:
 else:
     print("Image loaded successfully!")
 
-# Convert the image to grayscale
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-# Evaluate spacing uniformity
-spacing_score, spacing_suggestion, bounding_boxes, contours = rate_spacing_uniformity(gray)
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) # Image to grayscale
+spacing_score, spacing_suggestion, bounding_boxes, contours = rate_spacing_uniformity(gray) # Evaluate spacing uniformity
 
 # Output the results
 print(f"Word Spacing Score: {spacing_score:.2f}")
 print(f"Spacing Improvement Suggestion: {spacing_suggestion}")
-
-# Show image with detected contours and bounding boxes
-#cv2.imshow("Detected Words", image)
-#cv2.waitKey(0)
-#cv2.destroyAllWindows()
 show_contours(image, bounding_boxes, contours)

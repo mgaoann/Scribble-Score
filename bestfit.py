@@ -22,31 +22,32 @@ def best_fit(img):
     distances_squared = ((m * X - Y + b) ** 2) / (m**2 + 1)
     avg_squared_distance = np.mean(distances_squared)
 
+    # plt.figure(figsize=(12, 2))           //this is purely for testing/debugging purposes
+    # plt.subplot(1, 2, 1)
+    # # Plot scatter points
+    # plt.scatter(X, Y, c=intensities, cmap='grey', s=intensities, alpha=0.5, label="Pixel Intensities")
+    # # Plot best-fit line
+    # plt.plot(X, fit, color='red', linewidth=2, label="Best Fit Line")
+    # plt.ylim(0, h)
+    # plt.xlim(0, w)
+    # ax = plt.gca()
+    # ax.set_aspect('equal', adjustable='box')
+    # ax.set_facecolor('xkcd:black')
+    # # Labels and title
+    # plt.xlabel("X (width)")
+    # plt.ylabel("Y (height)")
+    # plt.title("Line of Best Fit for Grayscale Image")
+    # plt.legend()
 
-    plt.figure(figsize=(12, 2))
-    plt.subplot(1, 2, 1)
-    # Plot scatter points
-    plt.scatter(X, Y, c=intensities, cmap='grey', s=intensities, alpha=0.5, label="Pixel Intensities")
-    # Plot best-fit line
-    plt.plot(X, fit, color='red', linewidth=2, label="Best Fit Line")
-    plt.ylim(0, h)
-    plt.xlim(0, w)
-    ax = plt.gca()
-    ax.set_aspect('equal', adjustable='box')
-    ax.set_facecolor('xkcd:black')
-    # Labels and title
-    plt.xlabel("X (width)")
-    plt.ylabel("Y (height)")
-    plt.title("Line of Best Fit for Grayscale Image")
-    plt.legend()
+    # plt.subplot(1, 2, 2)
+    # plt.title("Sobel Edge Detection")
+    # plt.imshow(img, cmap="gray")
+    # plt.axis("off")
 
-    plt.subplot(1, 2, 2)
-    plt.title("Sobel Edge Detection")
-    plt.imshow(img, cmap="gray")
-    plt.axis("off")
+    # plt.show()
+    #print (avg_squared_distance/(np.average(Y, weights=intensities) ** 2))
 
-    plt.show()
-    print (avg_squared_distance/(np.average(Y, weights=intensities) ** 2))
+
     return avg_squared_distance/(np.average(Y, weights=intensities) ** 2)
 
 

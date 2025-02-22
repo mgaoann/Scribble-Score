@@ -28,7 +28,7 @@ def compute_ssim(image1, image2):
 
 def rate_handwriting(image):
     score = best_fit(image)
-    print(score)
+    #print(score)
     return (1 - score) * 150
 
 # suggest improvements
@@ -65,6 +65,5 @@ score = rate_handwriting(sob)
 improvement_suggestion = suggest_improvements(score)
 
 # Output the results
-print(f"Extracted Text: {text}")
-print(f"Handwriting Legibility Score: {score:.2f}")
+print(f"Extracted Text: {text}Handwriting Legibility Score: {score:.2f}")
 print(f"Improvement Suggestion: {improvement_suggestion}")

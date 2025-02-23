@@ -1,0 +1,84 @@
+/* THE BORDER IS FOR DEBUGGING PURPOSES */
+/* {
+    border: 5px  solid red;
+}*/ d
+
+.Outside {
+    display: flex;
+    flex-direction: column;
+    color: pink;
+}
+.title {
+    border-color: black;
+    background-image: url("yellowblue.jpg");
+    background-color: #cccccc;
+    margin: 0px;
+    padding: 80px;
+}
+.upload {
+    border-color: black;
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal-width columns */
+    gap: 20px; /* Space between columns */
+    padding: 20px;
+  }
+.container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+.faq {
+    border-color: black;
+}
+.absolute-container {
+    position: relative;
+    height: 150px; /* Set a height for the container */
+    padding: 20px;
+    border: 1px solid #ccc;
+}
+  
+.left-abs {
+    position: absolute;
+    left: 20px; /* Distance from the left edge */
+    top: 20px;
+}
+  
+.right-abs {
+    position: absolute;
+    right: 20px; /* Distance from the right edge */
+    top: 20px;
+}
+.footer {
+    display: flex;
+    background-color: grey;
+    justify-content: space-between;
+    gap: 180px;
+}
+.footer-left {
+    align-items: center;
+    justify-content: center;
+    margin-left: 120px;
+}
+.footer-right {
+    align-items: center;
+    justify-content: center;
+    margin-right: 120px;
+}
+.roboto-uniquifier {
+    font-family: "Roboto", serif;
+    font-optical-sizing: auto;
+    font-weight: 100;
+    font-style: normal;
+    font-variation-settings:
+      "wdth" 100;
+  }
+  
+
+.permanent-marker-regular {
+    font-family: "Permanent Marker", serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+

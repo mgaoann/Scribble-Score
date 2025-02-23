@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
+import {Component} from 'react';
 import './styles.css';
 import axios from "axios";
+import ImageUploader from "./imageUploader.js";
 
 function App() {
   const [data, setData] = useState([{}])  // Initialize with an empty array for members
@@ -30,6 +32,12 @@ function App() {
           </div>
         </div>
       </div>
+
+      <div>
+        <h1>Handwriting Analyzer</h1>
+        <ImageUploader />
+      </div>
+
       <div class="faq">
         <h1>Frequently Asked questions</h1>
         <h2>How can I improve my handwriting?</h2>

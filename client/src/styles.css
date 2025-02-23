@@ -55,6 +55,7 @@
     background-color: grey;
     justify-content: space-between;
     gap: 180px;
+    padding: 20px;
 }
 .footer-left {
     align-items: center;
@@ -82,3 +83,36 @@
     font-style: normal;
   }
 
+  .uploader-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  /* Left side container for the image or placeholder */
+  .image-placeholder {
+    width: 200px;
+    height: 200px;
+    border: 2px dashed #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Styling for placeholder text */
+  .placeholder-text {
+    color: #999;
+    text-align: center;
+  }
+  
+  /* Make sure the uploaded image fits within the container */
+  .preview {
+    max-width: 100%;
+    max-height: 100%;
+  }
+  
+  /* Right side container for the file input */
+  .upload-controls {
+    flex: 1;
+  }

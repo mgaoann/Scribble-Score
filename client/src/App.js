@@ -18,7 +18,7 @@ function App() {
       })
   }, [])
   return (
-    <div class="Outside">
+    <div class="Outside" >
       <div class="title">
         <h1>ScribbleScore</h1>
       </div>

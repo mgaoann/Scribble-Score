@@ -60,9 +60,15 @@ def analyze_handwriting(image_path):
         # print("Image loaded successfully!")
 
 
-# convert the image to grayscale
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) 
-sob = curve(sobel(gray))
+    # convert the image to grayscale
+   gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) 
+   # Resize the image if its dimensions are larger than 400
+   height, width = gray.shape
+   if height > 400 or width > 400:
+       scaling_factor = 400 / max(height, width)
+       gray = cv2.resize(gray, (int(width * scaling_factor), int(height * scaling_factor)), interpolation=cv2.INTER_AREA)
+   sob = curve(sobel(gray))
+
 
     #use tesseract to get text from img
     result = subprocess.run(['tesseract', image_path, 'stdout'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)

@@ -16,9 +16,9 @@ def detect_word_spaces(img, threshold=10):
     # Convert to binary
     _, binary = cv2.threshold(img, 128, 255, cv2.THRESH_BINARY_INV)
     
-    plt.imshow(binary, cmap="gray")
-    plt.title("Thresholded Binary Image")
-    plt.show()
+    # plt.imshow(binary, cmap="gray")
+    # plt.title("Thresholded Binary Image")
+    # plt.show()
 
     # Morphological closing to connect nearby letters horizontally and vertically
     letter_widths = []
@@ -26,7 +26,7 @@ def detect_word_spaces(img, threshold=10):
     contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     # Debugging: Print the number of contours detected
-    print(f"Number of contours detected: {len(contours)}")
+    # print(f"Number of contours detected: {len(contours)}")
 
     for cnt in contours:
         x, y, w, h = cv2.boundingRect(cnt)
@@ -54,7 +54,7 @@ def detect_word_spaces(img, threshold=10):
     contours, _ = cv2.findContours(closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     # Debugging: Print the number of contours detected after closing
-    print(f"Number of contours detected after closing: {len(contours)}")
+    # print(f"Number of contours detected after closing: {len(contours)}")
 
     bounding_boxes = [cv2.boundingRect(cnt) for cnt in contours if cv2.contourArea(cnt) > 15]
     bounding_boxes.sort(key=lambda b: b[0]) # Sort bounding boxes by x-coordinate (left to right)
@@ -64,18 +64,14 @@ def detect_word_spaces(img, threshold=10):
               for i in range(len(bounding_boxes)-1)]
     
     if len(spaces) == 0:
-<<<<<<< HEAD
-        return 0, 0, 0, 0, []  # No spaces found
-=======
         return [], 0, 0,[],[]  # No spaces found
->>>>>>> e3b390495cf55d61d6e89a2a87d2954e71aa0704
     
     # Compute average space width and standard deviation
     avg_space = np.mean(spaces)
     std_dev = np.std(spaces)
 
     # Debugging: Print the detected spaces
-    print(f"Detected spaces: {spaces}")
+    # print(f"Detected spaces: {spaces}")
     
     return spaces, avg_space, std_dev, bounding_boxes, contours
 

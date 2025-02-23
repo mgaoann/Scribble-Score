@@ -1,7 +1,8 @@
+#! /opt/homebrew/bin/python3 
+
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-from sobel import sobel, normal, curve
 
 def detect_word_spaces(img, threshold=10):
     """
@@ -63,7 +64,11 @@ def detect_word_spaces(img, threshold=10):
               for i in range(len(bounding_boxes)-1)]
     
     if len(spaces) == 0:
+<<<<<<< HEAD
         return 0, 0, 0, 0, []  # No spaces found
+=======
+        return [], 0, 0,[],[]  # No spaces found
+>>>>>>> e3b390495cf55d61d6e89a2a87d2954e71aa0704
     
     # Compute average space width and standard deviation
     avg_space = np.mean(spaces)
@@ -114,19 +119,19 @@ def show_contours(image, bounding_boxes, contours):
     plt.axis("off")
     plt.show()
 
-# Load the image
-image_path = input("Enter the image file path: ")
-image = cv2.imread(image_path)
-if image is None:
-    print("Error: The provided file is not a valid image or does not exist.")
-    exit()
-else:
-    print("Image loaded successfully!")
+# # Load the image
+# image_path = input("Enter the image file path: ")
+# image = cv2.imread(image_path)
+# if image is None:
+#     print("Error: The provided file is not a valid image or does not exist.")
+#     exit()
+# else:
+#     print("Image loaded successfully!")
 
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) # Image to grayscale
-spacing_score, spacing_suggestion, bounding_boxes, contours = rate_spacing_uniformity(gray) # Evaluate spacing uniformity
+# gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) # Image to grayscale
+# spacing_score, spacing_suggestion, bounding_boxes, contours = rate_spacing_uniformity(gray) # Evaluate spacing uniformity
 
-# Output the results
-print(f"Word Spacing Score: {spacing_score:.2f}")
-print(f"Spacing Improvement Suggestion: {spacing_suggestion}")
-show_contours(image, bounding_boxes, contours)
+# # Output the results
+# print(f"Word Spacing Score: {spacing_score:.2f}")
+# print(f"Spacing Improvement Suggestion: {spacing_suggestion}")
+# show_contours(image, bounding_boxes, contours)

@@ -37,11 +37,11 @@ def rate_handwriting(image):
 # suggest improvements
 def vert_improvements(score):
     if score > 80:
-        return "Your handwriting is very good! Little to no improvement needed"
+        return "Little to no improvement needed"
     elif score > 50:
-        return "Your handwriting is legible, but your letters and words are at inconsistent hights."
+        return "Your letters and words are at inconsistent heights, try writing in a straighter line"
     else:
-        return "Your handwriting is difficult to read. Try writing in a straighter line."
+        return "Your letters are scattered at various heights, use lined paper as practice"
 
 
 
@@ -62,7 +62,6 @@ result = subprocess.run(['tesseract', image_path, 'stdout'], stdout=subprocess.P
 text = result.stdout.decode('utf-8')
 if not text:
     print("No text detected. If there is handwriting in this image, I am unable to read it.")
-    exit()
 # Rate the handwriting
 score = rate_handwriting(sob)
 vert_suggestion = vert_improvements(score)
@@ -71,8 +70,8 @@ spacing_score, spacing_suggestion, bounding_boxes, contours = rate_spacing_unifo
 # print(spacing_score)
 score += spacing_score - 100
 # Output the results
-
-print(f"Extracted Text: {text}",end="")
+if text:
+    print(f"Extracted Text: {text}",end="")
 print(f"Handwriting Legibility Score: {score:.2f}")
 print(f"Alignment Improvement Suggestions: {vert_suggestion}")
 print(f"Spacing Improvement Suggestion: {spacing_suggestion}")

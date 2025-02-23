@@ -53,7 +53,7 @@ def analyze_handwriting(image_path):
     # image_path = input("Enter the image file path: ")
     image = cv2.imread(image_path)
     if image is None:
-        return {"error": "The provided file is not a valid image or does not exist."}
+        return {"message": "The provided file is not a valid image or does not exist."}
         # print("Error: The provided file is not a valid image or does not exist.")
         # exit()
     # else:
@@ -86,6 +86,7 @@ def analyze_handwriting(image_path):
     # print(score)
     # print(spacing_score)
     score += spacing_score - 100
+    score = round(score, 2)
     # Output the results
     '''if text:
         print(f"Extracted Text: {text}",end="")
@@ -96,7 +97,7 @@ def analyze_handwriting(image_path):
 
     return {
         "message": text if text else "No readable text detected.",
-        "handwriting_score": score,
-        "alignment_suggestion": vert_suggestion,
-        "spacing_suggestion": spacing_suggestion
+        "handwriting_score": score if text else "Not applicable.",
+        "alignment_suggestion": vert_suggestion if text else "Not applicable.",
+        "spacing_suggestion": spacing_suggestion if text else "Not applicable."
     }

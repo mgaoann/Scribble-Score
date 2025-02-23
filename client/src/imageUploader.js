@@ -1,4 +1,5 @@
 import { useState } from "react";
+//import './styles2.css';
 
 const ImageUploader = () => {
     const [selectedImage, setSelectedImage] = useState(null);
@@ -36,6 +37,15 @@ const ImageUploader = () => {
 
     return (
         <div>
+            {/*{selectedImage && (
+                <div>
+                    <img
+                        src={URL.createObjectURL(selectedImage)} // Preview image before upload
+                        alt="Selected Preview"
+                        style={{ maxWidth: "100%", maxHeight: "300px", marginBottom: "10px" }}
+                    />
+                </div>
+            )}*/}
             <input type="file" accept="image/*" onChange={handleImageChange} />
             <button onClick={handleUpload}>Upload</button>
             {/*{response && <p>{response}</p>}*/}

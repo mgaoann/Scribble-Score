@@ -22,7 +22,13 @@ const ImageUploader = () => {
                 body: formData,
             });
             const data = await response.json();
-            setResponse(data.message);
+            //setResponse(data.message);
+            setResponse({
+                message: data.message,
+                handwriting_score: data.handwriting_score,
+                alignment_suggestion: data.alignment_suggestion,
+                spacing_suggestion: data.spacing_suggestion
+            });
         } catch (error) {
             console.error("Error uploading image:", error);
         }
@@ -32,7 +38,16 @@ const ImageUploader = () => {
         <div>
             <input type="file" accept="image/*" onChange={handleImageChange} />
             <button onClick={handleUpload}>Upload</button>
-            {response && <p>{response}</p>}
+            {/*{response && <p>{response}</p>}*/}
+            {response && (
+                <div>
+                    <p><strong>Message:</strong> {response.message}</p>
+                    <p><strong>Handwriting Score:</strong> {response.handwriting_score}</p>
+                    <p><strong>Alignment Suggestion:</strong> {response.alignment_suggestion}</p>
+                    <p><strong>Spacing Suggestion:</strong> {response.spacing_suggestion}</p>
+                </div>
+            )}
+
         </div>
     )
 };

@@ -3,8 +3,48 @@
 import cv2
 import subprocess
 import numpy as np
+from sobel import sobel, normal, curve
+from bestfit import best_fit
+from wordspace import detect_word_spaces, rate_spacing_uniformity
 
-# Load the image
+# def mean_squared_error(image1, image2):
+#     return np.mean((image1.astype(np.float32) - image2.astype(np.float32)) ** 2)
+
+# def compute_ssim(image1, image2):
+#     C1 = 6.5025
+#     C2 = 58.5225
+    
+#     image1 = image1.astype(np.float32)
+#     image2 = image2.astype(np.float32)
+    
+#     mu1 = cv2.GaussianBlur(image1, (7, 7), 1.5)
+#     mu2 = cv2.GaussianBlur(image2, (7, 7), 1.5)
+    
+#     sigma1_sq = cv2.GaussianBlur(image1**2, (7, 7), 1.5) - mu1**2
+#     sigma2_sq = cv2.GaussianBlur(image2**2, (7, 7), 1.5) - mu2**2
+#     sigma12 = cv2.GaussianBlur(image1 * image2, (7, 7), 1.5) - mu1 * mu2
+    
+#     ssim_map = ((2 * mu1 * mu2 + C1) * (2 * sigma12 + C2)) / ((mu1**2 + mu2**2 + C1) * (sigma1_sq + sigma2_sq + C2))
+#     return np.mean(ssim_map)
+
+def rate_handwriting(image):
+    score = best_fit(image)
+    #print(score)
+    score = min((1 - score) * 120, 100)
+    score = max(score, 0)
+    return score
+
+# suggest improvements
+def vert_improvements(score):
+    if score > 80:
+        return "Little to no improvement needed"
+    elif score > 50:
+        return "Your letters and words are at inconsistent heights, try writing in a straighter line"
+    else:
+        return "Your letters are scattered at various heights, use lined paper as practice"
+
+
+
 image_path = input("Enter the image file path: ")
 image = cv2.imread(image_path)
 if image is None:
@@ -13,60 +53,25 @@ if image is None:
 else:
     print("Image loaded successfully!")
 
-# Convert the image to grayscale
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+# convert the image to grayscale
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) 
+sob = curve(sobel(gray))
 
-# Use tesseract command-line tool to extract text from the image
+#use tesseract to get text from img
 result = subprocess.run(['tesseract', image_path, 'stdout'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 text = result.stdout.decode('utf-8')
 if not text:
     print("No text detected. If there is handwriting in this image, I am unable to read it.")
-    exit()
-
-# Function to compute Mean Squared Error
-def mean_squared_error(image1, image2):
-    return np.mean((image1.astype(np.float32) - image2.astype(np.float32)) ** 2)
-
-# Function to compute Structural Similarity Index (SSIM)
-def compute_ssim(image1, image2):
-    C1 = 6.5025
-    C2 = 58.5225
-    
-    image1 = image1.astype(np.float32)
-    image2 = image2.astype(np.float32)
-    
-    mu1 = cv2.GaussianBlur(image1, (7, 7), 1.5)
-    mu2 = cv2.GaussianBlur(image2, (7, 7), 1.5)
-    
-    sigma1_sq = cv2.GaussianBlur(image1**2, (7, 7), 1.5) - mu1**2
-    sigma2_sq = cv2.GaussianBlur(image2**2, (7, 7), 1.5) - mu2**2
-    sigma12 = cv2.GaussianBlur(image1 * image2, (7, 7), 1.5) - mu1 * mu2
-    
-    ssim_map = ((2 * mu1 * mu2 + C1) * (2 * sigma12 + C2)) / ((mu1**2 + mu2**2 + C1) * (sigma1_sq + sigma2_sq + C2))
-    return np.mean(ssim_map)
-
-# Function to rate handwriting legibility
-def rate_handwriting(image):
-    mse = mean_squared_error(image, image)  # Comparing image with itself as no reference is provided
-    similarity = compute_ssim(image, image)
-    
-    score = (1 - mse / 1000) * similarity * 100
-    return max(0, min(100, score))  # Ensure score is within [0, 100]
-
-# Function to suggest improvements
-def suggest_improvements(score):
-    if score > 80:
-        return "Your handwriting is very good! Little to no improvement needed"
-    elif score > 50:
-        return "Your handwriting is legible, but could be improved by writing more clearly."
-    else:
-        return "Your handwriting is difficult to read. Try writing larger and more spaced out."
-
 # Rate the handwriting
-score = rate_handwriting(gray)
-improvement_suggestion = suggest_improvements(score)
-
+score = rate_handwriting(sob)
+vert_suggestion = vert_improvements(score)
+spacing_score, spacing_suggestion, bounding_boxes, contours = rate_spacing_uniformity(gray) # Evaluate spacing uniformity
+# print(score)
+# print(spacing_score)
+score += spacing_score - 100
 # Output the results
-print(f"Extracted Text: {text}")
+if text:
+    print(f"Extracted Text: {text}",end="")
 print(f"Handwriting Legibility Score: {score:.2f}")
-print(f"Improvement Suggestion: {improvement_suggestion}")
+print(f"Alignment Improvement Suggestions: {vert_suggestion}")
+print(f"Spacing Improvement Suggestion: {spacing_suggestion}")

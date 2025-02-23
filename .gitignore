@@ -6,3 +6,5 @@ venv
 node_modules
 package-lock.json
 package.json
+uploads/
+styles2.css

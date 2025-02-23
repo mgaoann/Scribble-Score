@@ -37,6 +37,12 @@ function App() {
         <h1>Frequently Asked questions</h1>
         <h2 style={{ textIndent: "20px" }}>How can I improve my handwriting?</h2>
         <p> You can improve your handwriting by practicing a little every day! Start by holding your pencil the right way and sitting up straight. Try writing slowly and carefully, making sure your letters are the same size and evenly spaced. Tracing letters and using lined paper can help you stay neat. The more you practice, the better and faster your handwriting will become!</p>
+        <h2 style={{ textIndent: "20px "}}>I wrote something but it told me that it couldn't detect my writing!</h2>
+        <p> If it makes a mistake, try using a clearer image! Make sure the room is well-lit, and try using a dark-colored marker to write!</p>
+        <h2 style={{ textIndent: "20px "}}>What type of images can I upload?</h2>
+        <p> You can upload photos in JPG, JPEG, or PNG format.</p>
+        <h2 style={{ textIndent: "20px "}}>What kind of handwriting should I use?</h2>
+        <p> You can use cursive or script. For the best results, try to use blank paper and use single line sentences!</p>
       </div>
       <div class="footer">
         <div class="footer-left">

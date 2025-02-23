@@ -3,17 +3,22 @@ from flask_cors import CORS
 import os
 from werkzeug.utils import secure_filename
 import cv2
+from rater import analyze_handwriting
 
 app = Flask(__name__)
 CORS(app)
+
+CORS(app, resources={r"/upload-image": {"origins": "*"}})  # Allow all origins
 
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg'}
 
-@app.route("/", methods=["POST"])
+@app.route("/", 
+           #methods=["POST"]
+           )
 def members():
-    data = request.get_json()
+    #data = request.get_json()
     return {"Members": ["Member1", "Member2", "Member3"]}
 
 def allowed_file(filename):
@@ -22,6 +27,7 @@ def allowed_file(filename):
 
 @app.route('/upload-image', methods=['POST'])
 def upload_image():
+    print("here2")
     '''if 'file' not in request.files:
         return jsonify({"error": "No file part"}), 400
 
@@ -54,9 +60,19 @@ def upload_image():
         return jsonify({"error": "Invalid image file"}), 400
 
     # Perform analysis (dummy response for now)
-    analysis_result = {"message": "Image processed successfully!"}
+    #analysis_result = {"message": "Image processed successfully!"}
+
+
+    analysis_result = analyze_handwriting(file_path)
+    print(analysis_result)
+    print("here3")
+
 
     return jsonify(analysis_result)
+
+
+
+    #return jsonify(analysis_result)
 
 
 #@app.route("/members")

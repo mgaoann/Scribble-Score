@@ -15,7 +15,7 @@ def detect_word_spaces(img, threshold=10):
     # Convert to binary
     _, binary = cv2.threshold(img, 128, 255, cv2.THRESH_BINARY_INV)
     
-    # Morphological closing to connect nearby letters horizontally
+    # Morphological closing to connect nearby letters horizontally and vertically
     letter_widths = []
     letter_heights = []
     contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -39,10 +39,7 @@ def detect_word_spaces(img, threshold=10):
 
     # Morphological closing vertically to merge dotted letters
     kernel_vert = cv2.getStructuringElement(cv2.MORPH_RECT, (avg_letter_height, 10))
-    binary = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel_vert)
-
-    #kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (20, 5))
-    #binary = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel)
+    closed = cv2.morphologyEx(closed, cv2.MORPH_CLOSE, kernel_vert)
 
     # Find contours (connected components of text)
     #contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -53,9 +50,6 @@ def detect_word_spaces(img, threshold=10):
     bounding_boxes = [cv2.boundingRect(cnt) for cnt in contours if cv2.contourArea(cnt) > 15]
     bounding_boxes.sort(key=lambda b: b[0]) # Sort bounding boxes by x-coordinate (left to right)
     
-    # Filters out small boxes (i.e. punctuation, dots on letters)
-    # bounding_boxes = [b for b in bounding_boxes if b[2] > 5 and b[3] > 5]
-
     # Compute spaces between words
     spaces = [bounding_boxes[i+1][0] - (bounding_boxes[i][0] + bounding_boxes[i][2])
               for i in range(len(bounding_boxes)-1)]

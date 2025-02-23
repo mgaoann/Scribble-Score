@@ -39,7 +39,7 @@ def detect_word_spaces(img, threshold=10):
 
     # Morphological closing vertically to merge dotted letters
     kernel_vert = cv2.getStructuringElement(cv2.MORPH_RECT, (avg_letter_height, 10))
-    binary = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel_vert)
+    closed = cv2.morphologyEx(closed, cv2.MORPH_CLOSE, kernel_vert)
 
     #kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (20, 5))
     #binary = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel)

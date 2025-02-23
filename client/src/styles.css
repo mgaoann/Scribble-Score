@@ -1,17 +1,33 @@
 /* THE BORDER IS FOR DEBUGGING PURPOSES */
 /* {
     border: 5px  solid red;
-}*/ d
+}*/
 
+@font-face {
+  font-family: 'Open-Dyslexic';
+  src: url('./fonts/OpenDyslexic-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Open-Dyslexic';
+  src: url('./fonts/OpenDyslexic-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+body {
+  font-family: 'Open-Dyslexic', sans-serif;
+}
 .Outside {
     display: flex;
     flex-direction: column;
-    color: pink;
+    color: #000000;
 }
 .title {
-    border-color: black;
-    background-image: url("yellowblue.jpg");
-    background-color: #cccccc;
+    border-color: #ff0000;
+    /* background-image: url("yellowblue.jpg"); */
+    background-color: #fbde7b;
     margin: 0px;
     padding: 80px;
 }
@@ -36,7 +52,7 @@
     position: relative;
     height: 150px; /* Set a height for the container */
     padding: 20px;
-    border: 1px solid #ccc;
+    border: 1px solid #f00;
 }
   
 .left-abs {

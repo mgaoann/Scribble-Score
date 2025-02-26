@@ -12,6 +12,12 @@ Scribble Score scans a JPG or PNG and processes it to read the handwriting, then
 - NumPy - handled matrix operations and other numerical computations
 - Matplotlib - generated visualizations
 
+## Future Plans and Improvements
+- Improve UI/UX - Further styling and polishing the page
+- Expanded Handwriting Criteria - Developing new metrics for evaluation handwriting
+- Enhanced Data Visualization - Adding more graphical representations of handwriting analysis
+- Deployment - Hosting the project online
+
 ## Contributors
 - [Angela Qian](https://github.com/angelaqian2023) - Developed the backend, implemented handwriting slant analysis and scoring, and contributed to UI design and implementation
 - [Maggie Gao](https://github.com/mgaoann) - Developed the backend, implemented handwriting spacing analysis and scoring, contributed to UI design, and helped integrated the frontend and backend 

@@ -8,13 +8,77 @@ Scribble Score scans a JPG or PNG and processes it to read the handwriting, then
 - React - created the user interface for uploading handwriting images and displaying feedback
 - Flask - managed API requests, processed images, and handled communication between front and backend
 - OpenCV - preprocessed handwriting images including thresholding and contour detection
-- Tesseract OCR - extracted text from handwriting samples
 - NumPy - handled matrix operations and other numerical computations
 - Matplotlib - generated visualizations
 
+## Running the Project Locally
+
+Follow these steps to run both the backend (Flask) and frontend (Vite React) locally.
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/mgaoann/Scribble-Score
+```
+
+---
+
+### 2. Set Up the Backend
+Create and activate a virtual environment
+
+```bash
+cd backend
+python -m venv venv
+```
+#### Activate the virtual environment
+On Windows:
+```bash
+venv\Scripts\activate
+```
+
+On macOS/Linux:
+```bash
+source venv/bin/activate
+```
+
+#### Install dependencies
+```bash
+pip install
+```
+
+#### Run the Flask server
+```bash
+python __init__.py
+```
+
+---
+
+### 3. Set Up the Frontend
+Open a new terminal and navigate to the frontend directory:
+```bash
+cd client-vite
+```
+
+#### Install dependencies
+```bash
+npm install
+```
+
+#### Run the development server
+```bash
+npm run dev
+```
+
+---
+
+### 4. Access the Application
+Open your browser and navigate to http://localhost:5173
+
+---
+
 ## Future Plans and Improvements
 - Improve UI/UX - Further styling and polishing the page
-- Expanded Handwriting Criteria - Developing new metrics for evaluation handwriting
+- Expanded Handwriting Criteria - Developing new metrics for evaluating handwriting
 - Enhanced Data Visualization - Adding more graphical representations of handwriting analysis
 - Deployment - Hosting the project online
 
